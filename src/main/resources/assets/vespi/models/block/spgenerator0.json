@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "vespi:blocks/spgenerator_top",
+		"down": "vespi:blocks/spgenerator_bottom",
+		"up": "vespi:blocks/spgenerator_top",
+		"north": "vespi:blocks/spgenerator_side",
+		"south": "vespi:blocks/spgenerator_side",
+		"west": "vespi:blocks/spgenerator_side",
+		"east": "vespi:blocks/spgenerator_side"
+	}
+}

@@ -1,0 +1,16 @@
+[
+{
+	"modid": "vespi",
+	"name": "SugarPowered Industry",
+	"description": "Will be revival of the industry on Minecraft",
+	"version": "SI1 Build 1",
+	"mcversion": "1.8",
+	"url": "http://el-blacklab.net/",
+	"updateUrl": "",
+	"authors": ["Verclene"],
+	"credits": "by Verclene",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": ["net.blacklab.lib"]
+}
+]
