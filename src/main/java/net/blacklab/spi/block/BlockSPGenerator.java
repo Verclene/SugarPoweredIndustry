@@ -20,4 +20,10 @@ public class BlockSPGenerator extends BlockContainer {
 		return new TileEntitySPGenerator();
 	}
 
+	@Override
+	public int getRenderType() {
+		// TODO 自動生成されたメソッド・スタブ
+		return 3;
+	}
+
 }

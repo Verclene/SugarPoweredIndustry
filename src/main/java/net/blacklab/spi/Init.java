@@ -17,9 +17,8 @@ public class Init {
 	}
 	
 	public static void registerModels(){
-		ModelBakery.addVariantName(Item.getItemFromBlock(blockSPGenerator), SugarPoweredIndustry.MODID + ":spgenerator0");
 		ModelLoader.setCustomModelResourceLocation(
-				Item.getItemFromBlock(blockSPGenerator), 0, new ModelResourceLocation(SugarPoweredIndustry.MODID + ":spgenerator0", "inventory"));
+				Item.getItemFromBlock(blockSPGenerator), 0, new ModelResourceLocation(SugarPoweredIndustry.MODID + ":spgenerator", "inventory"));
 	}
 
 }

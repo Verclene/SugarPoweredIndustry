@@ -1,5 +1,5 @@
 {
-	"parent": "vespi:block/spgenerator0",
+	"parent": "vespi:block/spgenerator",
 	"display": {
 		"thirdperson": {
 			"scale": [0.375, 0.375, 0.375]
