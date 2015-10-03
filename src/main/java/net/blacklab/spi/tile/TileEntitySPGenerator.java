@@ -5,6 +5,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
@@ -51,9 +54,34 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
 		// TODO 自動生成されたメソッド・スタブ
-		itemStackToConsume.stackSize-=count;
-		if(itemStackToConsume.stackSize<=0) itemStackToConsume = null;
-		return itemStackToConsume;
+		if (itemStackToConsume != null)
+        {
+            ItemStack itemstack;
+
+            if (itemStackToConsume.stackSize <= count)
+            {
+                itemstack = itemStackToConsume;
+                this.itemStackToConsume = null;
+                this.markDirty();
+                return itemstack;
+            }
+            else
+            {
+                itemstack = itemStackToConsume.splitStack(count);
+
+                if (itemStackToConsume.stackSize == 0)
+                {
+                    itemStackToConsume = null;
+                }
+
+                this.markDirty();
+                return itemstack;
+            }
+        }
+        else
+        {
+            return null;
+        }
 	}
 
 	@Override
@@ -138,11 +166,21 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 		super.writeToNBT(compound);
 
 		compound.setInteger("VSAPI_SP", sp);
-		NBTTagCompound tagCompound = null;
-		if(itemStackToConsume!=null){
-			itemStackToConsume.writeToNBT(tagCompound);
-			compound.setTag("VSAPI_SLOT", tagCompound);
-		}
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		if(itemStackToConsume!=null) itemStackToConsume.writeToNBT(tagCompound);
+		compound.setTag("VSAPI_SLOT", tagCompound);
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbtTagCompound = new NBTTagCompound();
+		this.writeToNBT(nbtTagCompound);
+		return new S35PacketUpdateTileEntity(pos, 0, nbtTagCompound);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		this.readFromNBT(pkt.getNbtCompound());
 	}
 
 }
