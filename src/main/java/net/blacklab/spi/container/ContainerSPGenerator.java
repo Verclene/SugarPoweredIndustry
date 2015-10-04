@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerSPGenerator extends Container {
 	
-	private IInventory generatorInventory;
-	private EntityPlayer thePlayer;
+	protected IInventory generatorInventory;
+	protected EntityPlayer thePlayer;
 	
 	public ContainerSPGenerator(EntityPlayer player, IInventory playerInventory, IInventory gInventory) {
 		thePlayer = player;

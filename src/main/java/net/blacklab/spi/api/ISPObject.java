@@ -32,7 +32,15 @@ public interface ISPObject {
 	 * @param spObject
 	 */
 	public boolean sendSPToObject(int value, ISPObject spObject);
-
+	
+	/**
+	 * 1更新毎に、SPを受け取る量を返す。
+	 * @param value
+	 * @param spObject
+	 * @return
+	 */
+	public int amountReceiveSPperUpdate(ISPObject spObject);
+	
 	/**
 	 * SPを受け取る際の処理。falseを返すと受け取らなくなる。
 	 * @param value

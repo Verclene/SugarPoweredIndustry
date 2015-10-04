@@ -1,6 +1,7 @@
 package net.blacklab.spi;
 
-import net.blacklab.spi.client.gui.GuiHandler;
+import net.blacklab.spi.common.GuiHandler;
+import net.blacklab.spi.common.Init;
 import net.blacklab.spi.proxy.SPICommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;

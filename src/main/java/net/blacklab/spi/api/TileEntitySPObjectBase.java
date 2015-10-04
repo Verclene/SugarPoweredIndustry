@@ -1,5 +1,6 @@
 package net.blacklab.spi.api;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileEntitySPObjectBase extends TileEntity implements
@@ -9,7 +10,6 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 	
 	@Override
 	public int getSP() {
-		// TODO 自動生成されたメソッド・スタブ
 		return sp;
 	}
 	
@@ -31,16 +31,22 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 		}
 		if(value > (getMaxSP()-sp)){
 			sp = getMaxSP();
+			return true;
 		}
 		sp += value;
 		return true;
 	}
 
 	@Override
+	public int amountReceiveSPperUpdate(ISPObject spObject) {
+		if(sp>=getMaxSP()) return 0;
+		return 50;
+	}
+
+	@Override
 	public boolean sendSPToObject(int value, ISPObject spObject) {
 		if(sp<value) value = sp;
 		if(spObject.onReceiveSP(value, this)){
-			spObject.addSP(value);
 			sp -= value;
 			return true;
 		}
@@ -49,8 +55,7 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 
 	@Override
 	public boolean onReceiveSP(int value, ISPObject spObject) {
-		// TODO 自動生成されたメソッド・スタブ
-		return true;
+		return addSP(value);
 	}
-	
+
 }
