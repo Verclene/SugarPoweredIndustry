@@ -2,6 +2,7 @@ package net.blacklab.spi.common;
 
 import net.blacklab.spi.SugarPoweredIndustry;
 import net.blacklab.spi.block.BlockSPBattery;
+import net.blacklab.spi.block.BlockSPCable;
 import net.blacklab.spi.block.BlockSPGenerator;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -10,11 +11,16 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Init {
 	
+	public static BlockSPCable blockSPCable;
+	
 	public static BlockSPGenerator blockSPGenerator;
 	public static BlockSPBattery blockSPBattery;
 	
 	public static void registerBlocks() {
 		// Block
+		blockSPCable = new BlockSPCable();
+		GameRegistry.registerBlock(blockSPCable, "spcable");
+		
 		blockSPGenerator = new BlockSPGenerator();
 		GameRegistry.registerBlock(blockSPGenerator, "spgenerator");
 		

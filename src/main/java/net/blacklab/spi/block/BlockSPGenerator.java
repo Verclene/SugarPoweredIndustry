@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.blacklab.spi.SugarPoweredIndustry;
+import net.blacklab.spi.api.ConstUtil;
 import net.blacklab.spi.api.ISPObject;
 import net.blacklab.spi.common.GuiHandler;
 import net.blacklab.spi.tile.TileEntitySPGenerator;
@@ -80,11 +81,8 @@ public class BlockSPGenerator extends BlockContainer {
 		return state;
 	}
 	
-	public static int maxSendingSP = 300;
+	public int maxSendingSP = 300;
 
-	private static final int XBOUND_LOOP[] = new int[]{-1, 0, 1, 0, 0, 0};
-	private static final int YBOUND_LOOP[] = new int[]{ 0, 0, 0, 0,-1, 1};
-	private static final int ZBOUND_LOOP[] = new int[]{ 0,-1, 0, 1, 0, 0};
 	/**
 	 * SPを周りに配信
 	 * @param worldIn
@@ -96,7 +94,7 @@ public class BlockSPGenerator extends BlockContainer {
 		if(srcEntity instanceof TileEntitySPGenerator){
 			Map<TileEntity, Integer> targetTileEntities = new HashMap<TileEntity, Integer>();
 			for(int i=0; i<6; i++){
-				BlockPos targetPos = pos.add(XBOUND_LOOP[i], YBOUND_LOOP[i], ZBOUND_LOOP[i]);
+				BlockPos targetPos = pos.add(ConstUtil.XBOUND_LOOP[i], ConstUtil.YBOUND_LOOP[i], ConstUtil.ZBOUND_LOOP[i]);
 				TileEntity dstEntity = worldIn.getTileEntity(targetPos);
 				if(dstEntity instanceof ISPObject){
 					int amountReceive = ((ISPObject) dstEntity).amountReceiveSPperUpdate((ISPObject) srcEntity);
