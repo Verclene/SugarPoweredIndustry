@@ -1,6 +1,8 @@
 package net.blacklab.spi.container;
 
+import net.blacklab.spi.tile.TileEntitySPGenerator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -9,8 +11,10 @@ import net.minecraft.item.ItemStack;
 public class ContainerSPGenerator extends Container {
 	
 	private IInventory generatorInventory;
+	private EntityPlayer thePlayer;
 	
-	public ContainerSPGenerator(IInventory playerInventory, IInventory gInventory) {
+	public ContainerSPGenerator(EntityPlayer player, IInventory playerInventory, IInventory gInventory) {
+		thePlayer = player;
 		generatorInventory = gInventory;
 		
 		int i,j;
@@ -24,6 +28,15 @@ public class ContainerSPGenerator extends Container {
 
 		for (i = 0; i < 9; ++i){
 			addSlotToContainer(new Slot(playerInventory, i, 8 + i * 18, 142));
+		}
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		// TODO ちょっと当てずっぽう気味。こんなんでいいんだろうか…
+		if(!thePlayer.worldObj.isRemote){
+			((EntityPlayerMP)thePlayer).playerNetServerHandler.sendPacket(((TileEntitySPGenerator)generatorInventory).getDescriptionPacket());
 		}
 	}
 

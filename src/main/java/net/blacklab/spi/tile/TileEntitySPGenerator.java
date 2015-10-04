@@ -54,34 +54,27 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
 		// TODO 自動生成されたメソッド・スタブ
-		if (itemStackToConsume != null)
-        {
-            ItemStack itemstack;
+		if (itemStackToConsume != null){
+			ItemStack itemstack;
 
-            if (itemStackToConsume.stackSize <= count)
-            {
-                itemstack = itemStackToConsume;
-                this.itemStackToConsume = null;
-                this.markDirty();
-                return itemstack;
-            }
-            else
-            {
-                itemstack = itemStackToConsume.splitStack(count);
+			if (itemStackToConsume.stackSize <= count){
+				itemstack = itemStackToConsume;
+				itemStackToConsume = null;
+				markDirty();
+				return itemstack;
+			}else{
+				itemstack = itemStackToConsume.splitStack(count);
 
-                if (itemStackToConsume.stackSize == 0)
-                {
-                    itemStackToConsume = null;
-                }
+				if (itemStackToConsume.stackSize == 0){
+					itemStackToConsume = null;
+				}
 
-                this.markDirty();
-                return itemstack;
-            }
-        }
-        else
-        {
-            return null;
-        }
+				markDirty();
+				return itemstack;
+			}
+		}else{
+			return null;
+		}
 	}
 
 	@Override

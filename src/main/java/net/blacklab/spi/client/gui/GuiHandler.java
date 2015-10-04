@@ -17,7 +17,7 @@ public class GuiHandler implements IGuiHandler {
 		Object object = null;
 		switch (ID) {
 		case GUI_ID_SPGENERATOR:
-			object = new ContainerSPGenerator(player.inventory, (IInventory) world.getTileEntity(new BlockPos(x, y, z)));
+			object = new ContainerSPGenerator(player, player.inventory, (IInventory) world.getTileEntity(new BlockPos(x, y, z)));
 			break;
 
 		default:
@@ -32,7 +32,7 @@ public class GuiHandler implements IGuiHandler {
 		Object object = null;
 		switch (ID) {
 		case GUI_ID_SPGENERATOR:
-			object = new GuiContainerSPGenerator(player.inventory, (IInventory) world.getTileEntity(new BlockPos(x, y, z)));
+			object = new GuiContainerSPGenerator(player, player.inventory, (IInventory) world.getTileEntity(new BlockPos(x, y, z)));
 			break;
 
 		default:

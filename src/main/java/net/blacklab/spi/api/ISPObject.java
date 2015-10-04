@@ -15,10 +15,10 @@ public interface ISPObject {
 	void setSP(int value);
 	
 	/**
-	 * SP値を加える。負の値を指定して、SP値を減らすのに使うべきではない。
+	 * SP値を加える。返り値は、SP値が追加されたかを返す。
 	 * @param value
 	 */
-	void addSP(int value);
+	boolean addSP(int value);
 	
 	/**
 	 * 保管可能な最大SPを取得する。
@@ -27,11 +27,11 @@ public interface ISPObject {
 	int getMaxSP();
 	
 	/**
-	 * ISPObjectを特定しSPを送信する。
+	 * ISPObjectを特定しSPを送信する。相手先にSPが正常に追加された場合、trueを返すこと。
 	 * @param value
 	 * @param spObject
 	 */
-	public void sendSPToObject(int value, ISPObject spObject);
+	public boolean sendSPToObject(int value, ISPObject spObject);
 
 	/**
 	 * SPを受け取る際の処理。falseを返すと受け取らなくなる。

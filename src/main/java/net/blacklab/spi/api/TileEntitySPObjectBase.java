@@ -23,21 +23,28 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 	}
 
 	@Override
-	public void addSP(int value) {
+	public boolean addSP(int value) {
 		// TODO 自動生成されたメソッド・スタブ
+		if(sp>=getMaxSP()){
+			sp = getMaxSP();
+			return false;
+		}
 		if(value > (getMaxSP()-sp)){
 			sp = getMaxSP();
 		}
 		sp += value;
+		return true;
 	}
 
 	@Override
-	public void sendSPToObject(int value, ISPObject spObject) {
+	public boolean sendSPToObject(int value, ISPObject spObject) {
 		if(sp<value) value = sp;
 		if(spObject.onReceiveSP(value, this)){
 			spObject.addSP(value);
 			sp -= value;
+			return true;
 		}
+		return false;
 	}
 
 	@Override
