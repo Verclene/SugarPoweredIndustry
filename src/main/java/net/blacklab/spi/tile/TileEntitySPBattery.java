@@ -28,8 +28,7 @@ public class TileEntitySPBattery extends TileEntitySPGenerator {
 
 	@Override
 	public int amountReceiveSPperUpdate(ISPObject spObject) {
-		if(sp>=getMaxSP()) return 0;
-		return Math.min(50, getMaxSP()-sp);
+		return Integer.MAX_VALUE;
 	}
 
 	@Override

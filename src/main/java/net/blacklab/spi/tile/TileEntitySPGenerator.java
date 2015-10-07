@@ -2,6 +2,7 @@ package net.blacklab.spi.tile;
 
 import net.blacklab.spi.api.ISPObject;
 import net.blacklab.spi.api.TileEntitySPObjectBase;
+import net.blacklab.spi.block.BlockSPGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -36,8 +37,10 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 
 	@Override
 	public boolean onReceiveSP(int value, ISPObject spObject) {
-		// 内部発電でしか受け付けない
-		return false;
+		if(!BlockSPGenerator.sendSPAround(value, worldObj, getPos(), worldObj.getBlockState(getPos()), spObject)){
+			addSP(value);
+		}
+		return true;
 	}
 
 	@Override

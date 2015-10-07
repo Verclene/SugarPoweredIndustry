@@ -1,15 +1,13 @@
 package net.blacklab.spi.block;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import net.blacklab.spi.SugarPoweredIndustry;
 import net.blacklab.spi.api.ConstUtil;
 import net.blacklab.spi.api.ISPObject;
+import net.blacklab.spi.api.TileEntitySPObjectBase;
 import net.blacklab.spi.common.GuiHandler;
 import net.blacklab.spi.tile.TileEntitySPGenerator;
 import net.minecraft.block.BlockContainer;
@@ -67,9 +65,10 @@ public class BlockSPGenerator extends BlockContainer {
 			}
 			
 			//SPの配信
-			if(!worldIn.isBlockPowered(pos)) sendSPAround(worldIn, pos, state);
+			if(((TileEntitySPGenerator) tEntity).getSP() > 0 && !worldIn.isBlockPowered(pos))
+				sendSPAround(Math.min(((TileEntitySPGenerator) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
 		}
-		worldIn.scheduleUpdate(pos, state.getBlock(), 2);
+		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 	}
 
 	@Override
@@ -77,51 +76,45 @@ public class BlockSPGenerator extends BlockContainer {
 			EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
 			EntityLivingBase placer) {
 		IBlockState state = super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
-		worldIn.scheduleUpdate(pos, state.getBlock(), 2);
+		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 		return state;
 	}
 	
-	public int maxSendingSP = 300;
+	public int sendingSPperUpdate = 300;
 
 	/**
 	 * SPを周りに配信
 	 * @param worldIn
 	 * @param pos
 	 * @param state
+	 * @return 送信先が見つかったかどうか
 	 */
-	public void sendSPAround(World worldIn, BlockPos pos, IBlockState state){
+	public static boolean sendSPAround(int value, World worldIn, BlockPos pos, IBlockState state, ISPObject receivedIspObject){
 		TileEntity srcEntity = worldIn.getTileEntity(pos);
-		if(srcEntity instanceof TileEntitySPGenerator){
-			Map<TileEntity, Integer> targetTileEntities = new HashMap<TileEntity, Integer>();
+		if(srcEntity instanceof TileEntitySPObjectBase){
+			List<TileEntity> targetTileEntities = new ArrayList<TileEntity>();
 			for(int i=0; i<6; i++){
 				BlockPos targetPos = pos.add(ConstUtil.XBOUND_LOOP[i], ConstUtil.YBOUND_LOOP[i], ConstUtil.ZBOUND_LOOP[i]);
 				TileEntity dstEntity = worldIn.getTileEntity(targetPos);
-				if(dstEntity instanceof ISPObject){
+				if(dstEntity instanceof ISPObject && !dstEntity.equals(receivedIspObject)){
 					int amountReceive = ((ISPObject) dstEntity).amountReceiveSPperUpdate((ISPObject) srcEntity);
-					if(amountReceive>0) targetTileEntities.put(dstEntity, amountReceive);
+					if(amountReceive>0) targetTileEntities.add(dstEntity);
 				}
 			}
 			
 			if(!targetTileEntities.isEmpty()){
-				//SPを分配して配信
-				int storedSP = ((TileEntitySPGenerator) srcEntity).getSP();
-				int expectedTotalSendingSP = 0;
-				for(Integer i:targetTileEntities.values()) expectedTotalSendingSP += i;
-				double sendingRatio = 1.0D;
-				if(expectedTotalSendingSP > maxSendingSP){
-					sendingRatio = (double)maxSendingSP / (double)expectedTotalSendingSP;
-					if(storedSP < maxSendingSP) sendingRatio *= (double)storedSP / (double)maxSendingSP;
-				}else{
-					if(storedSP < expectedTotalSendingSP) sendingRatio *= (double)storedSP / (double)expectedTotalSendingSP;
+				// SPを配信する。
+				int sendingSPperTile = (int)((float)value / (float)targetTileEntities.size());
+				for(TileEntity entity : targetTileEntities){
+					ISPObject targetObject = (ISPObject) entity;
+					int actualAmount = Math.min(sendingSPperTile, targetObject.amountReceiveSPperUpdate((ISPObject) srcEntity));
+					boolean flag = ((TileEntitySPObjectBase) srcEntity).sendSPToObject(actualAmount, targetObject);
+					if(!flag) ((TileEntitySPObjectBase) srcEntity).addSP(actualAmount);
 				}
-				Iterator iterator = targetTileEntities.entrySet().iterator();
-				while(iterator.hasNext()){
-					Entry entry = (Entry) iterator.next();
-					// カッコマシ☆モノグサキャストオオメ
-					((ISPObject) srcEntity).sendSPToObject((int)(((Integer)entry.getValue()).doubleValue() * sendingRatio), ((ISPObject)entry.getKey()));
-				}
+				return true;
 			}
 		}
+		return false;
 	}
 
 }

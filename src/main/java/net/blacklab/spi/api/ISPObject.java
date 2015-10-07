@@ -29,14 +29,14 @@ public interface ISPObject {
 	/**
 	 * ISPObjectを特定しSPを送信する。相手先にSPが正常に追加された場合、trueを返すこと。
 	 * @param value
-	 * @param spObject
+	 * @param spObject 送信「先」ターゲット
 	 */
 	public boolean sendSPToObject(int value, ISPObject spObject);
 	
 	/**
 	 * 1更新毎に、SPを受け取る量を返す。
 	 * @param value
-	 * @param spObject
+	 * @param spObject 送信元ターゲット
 	 * @return
 	 */
 	public int amountReceiveSPperUpdate(ISPObject spObject);
@@ -44,8 +44,8 @@ public interface ISPObject {
 	/**
 	 * SPを受け取る際の処理。falseを返すと受け取らなくなる。
 	 * @param value
-	 * @param spObject
+	 * @param spObject 送信元ターゲット
 	 */
 	public boolean onReceiveSP(int value, ISPObject spObject);
-
+	
 }
