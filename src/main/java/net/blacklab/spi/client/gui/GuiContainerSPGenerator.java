@@ -49,8 +49,8 @@ public class GuiContainerSPGenerator extends GuiContainer {
 		fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 
 		if(generatorInventory instanceof TileEntitySPGenerator){
-			String ssp = String.format("SP:  %4d", ((ISPObject)generatorInventory).getSP());
-			String sspm = String.format("(Max: %4d)", ((ISPObject)generatorInventory).getMaxSP());
+			String ssp = String.format("SP:  %4.0f", ((ISPObject)generatorInventory).getSP());
+			String sspm = String.format("(Max: %4.0f)", ((ISPObject)generatorInventory).getMaxSP());
 			fontRendererObj.drawString(ssp, 98, 44-fontRendererObj.FONT_HEIGHT / 2, 4210752);
 			fontRendererObj.drawString(sspm, 98, 44+fontRendererObj.FONT_HEIGHT / 2, 4210752);
 		}

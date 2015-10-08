@@ -14,19 +14,19 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 public class TileEntitySPCable extends TileEntitySPObjectBase {
 	
 	public class SendingSPList {
-		private CopyOnWriteArrayList<Map<ISPObject, Integer>> inputMap;
+		private CopyOnWriteArrayList<Map<ISPObject, Float>> inputMap;
 		
 		public SendingSPList() {
-			inputMap = new CopyOnWriteArrayList<Map<ISPObject,Integer>>();
+			inputMap = new CopyOnWriteArrayList<Map<ISPObject,Float>>();
 		}
 		
-		public void putEntry(ISPObject object, Integer amount){
-			Map<ISPObject, Integer> entry;
+		public void putEntry(ISPObject object, Float amount){
+			Map<ISPObject, Float> entry;
 			if(inputMap.isEmpty()){
-				inputMap.add(new ConcurrentHashMap<ISPObject, Integer>());
+				inputMap.add(new ConcurrentHashMap<ISPObject, Float>());
 			}
 			entry = inputMap.get(inputMap.size()-1);
-			if(entry==null) entry = new ConcurrentHashMap<ISPObject, Integer>();
+			if(entry==null) entry = new ConcurrentHashMap<ISPObject, Float>();
 			if(entry.containsKey(object)){
 				entry.put(object, entry.get(object) + amount);
 			}else{
@@ -34,13 +34,13 @@ public class TileEntitySPCable extends TileEntitySPObjectBase {
 			}
 		}
 		
-		public Map<ISPObject, Integer> getNewestEntry(){
+		public Map<ISPObject, Float> getNewestEntry(){
 			if(inputMap.isEmpty()) return null;
 			return inputMap.remove(0);
 		}
 		
 		public void prepEntry(){
-			inputMap.add(new ConcurrentHashMap<ISPObject, Integer>());
+			inputMap.add(new ConcurrentHashMap<ISPObject, Float>());
 		}
 		
 		public boolean isEmpty(){
@@ -61,18 +61,18 @@ public class TileEntitySPCable extends TileEntitySPObjectBase {
 	}
 
 	@Override
-	public int amountReceiveSPperUpdate(ISPObject spObject) {
+	public float amountReceiveSPperUpdate(ISPObject spObject) {
 		return 300;
 	}
 
 	@Override
-	public boolean onReceiveSP(int value, ISPObject spObject) {
+	public boolean onReceiveSP(float value, ISPObject spObject) {
 		sendingSPList.putEntry(spObject, value);
 		return true;
 	}
 
 	@Override
-	public int getMaxSP() {
+	public float getMaxSP() {
 		return Integer.MAX_VALUE;
 	}
 	

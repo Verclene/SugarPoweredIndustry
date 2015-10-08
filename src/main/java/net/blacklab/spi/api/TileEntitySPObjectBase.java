@@ -5,15 +5,15 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class TileEntitySPObjectBase extends TileEntity implements
 		ISPObject {
 	
-	protected int sp = 0;
+	protected float sp = 0;
 	
 	@Override
-	public int getSP() {
+	public float getSP() {
 		return sp;
 	}
 	
 	@Override
-	public void setSP(int value) {
+	public void setSP(float value) {
 		if(value<=getMaxSP()){
 			sp = value;
 		}else{
@@ -22,7 +22,7 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 	}
 
 	@Override
-	public boolean addSP(int value) {
+	public boolean addSP(float value) {
 		// TODO 自動生成されたメソッド・スタブ
 		if(sp>=getMaxSP()){
 			sp = getMaxSP();
@@ -37,13 +37,13 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 	}
 
 	@Override
-	public int amountReceiveSPperUpdate(ISPObject spObject) {
+	public float amountReceiveSPperUpdate(ISPObject spObject) {
 		if(sp>=getMaxSP()) return 0;
 		return 50;
 	}
 
 	@Override
-	public boolean sendSPToObject(int value, ISPObject spObject) {
+	public boolean sendSPToObject(float value, ISPObject spObject) {
 		if(sp<value) value = sp;
 		if(spObject.onReceiveSP(value, this)){
 			sp -= value;
@@ -53,7 +53,7 @@ public abstract class TileEntitySPObjectBase extends TileEntity implements
 	}
 
 	@Override
-	public boolean onReceiveSP(int value, ISPObject spObject) {
+	public boolean onReceiveSP(float value, ISPObject spObject) {
 		return addSP(value);
 	}
 

@@ -51,17 +51,22 @@ public class BlockSPCable extends BlockContainer {
 			SendingSPList spList = ((TileEntitySPCable) tEntity).getSendingList();
 			if(!spList.isEmpty()){
 				spList.prepEntry();
-				Map<ISPObject, Integer> iMap = spList.getNewestEntry();
+				Map<ISPObject, Float> iMap = spList.getNewestEntry();
 				if(iMap!=null){
-					Iterator<Entry<ISPObject, Integer>> iterator = iMap.entrySet().iterator();
+					Iterator<Entry<ISPObject, Float>> iterator = iMap.entrySet().iterator();
 					while(iterator.hasNext()){
-						Entry<ISPObject, Integer> entry = iterator.next();
+						Entry<ISPObject, Float> entry = iterator.next();
 						((TileEntitySPCable) tEntity).addSP(entry.getValue());
 						if(!BlockSPGenerator.sendSPAround(entry.getValue(), worldIn, pos, state, entry.getKey())){
 							BlockSPGenerator.sendSPAround(entry.getValue(), worldIn, pos, state, (ISPObject) tEntity);
 						}
 					}
 				}
+			}
+			// どうしても残ってしまった？
+			if(((TileEntitySPCable) tEntity).getSP()>0){
+				spList.putEntry((ISPObject) tEntity, ((TileEntitySPCable) tEntity).getSP());
+				((TileEntitySPCable) tEntity).setSP(0);
 			}
 		}
 		worldIn.scheduleUpdate(pos, state.getBlock(), 1);

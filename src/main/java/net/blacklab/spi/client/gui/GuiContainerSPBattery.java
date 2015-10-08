@@ -43,8 +43,8 @@ public class GuiContainerSPBattery extends GuiContainer {
 		fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 
 		if(batteryInventory instanceof TileEntitySPGenerator){
-			String ssp = String.format("SP:  %4d", ((ISPObject)batteryInventory).getSP());
-			String sspm = String.format("(Max: %4d)", ((ISPObject)batteryInventory).getMaxSP());
+			String ssp = String.format("SP:  %4.0f", ((ISPObject)batteryInventory).getSP());
+			String sspm = String.format("(Max: %4.0f)", ((ISPObject)batteryInventory).getMaxSP());
 			fontRendererObj.drawString(ssp, 98, 44-fontRendererObj.FONT_HEIGHT / 2, 4210752);
 			fontRendererObj.drawString(sspm, 98, 44+fontRendererObj.FONT_HEIGHT / 2, 4210752);
 		}

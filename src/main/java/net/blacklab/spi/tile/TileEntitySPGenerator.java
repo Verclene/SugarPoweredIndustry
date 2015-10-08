@@ -18,7 +18,7 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 	protected ItemStack itemStackToConsume;
 
 	@Override
-	public int getMaxSP() {
+	public float getMaxSP() {
 		// TODO 自動生成されたメソッド・スタブ
 		return 5000;
 	}
@@ -30,16 +30,15 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 	}
 
 	@Override
-	public int amountReceiveSPperUpdate(ISPObject spObject) {
+	public float amountReceiveSPperUpdate(ISPObject spObject) {
 		// TODO 自動生成されたメソッド・スタブ
 		return 0;
 	}
 
 	@Override
-	public boolean onReceiveSP(int value, ISPObject spObject) {
-		if(!BlockSPGenerator.sendSPAround(value, worldObj, getPos(), worldObj.getBlockState(getPos()), spObject)){
-			addSP(value);
-		}
+	public boolean onReceiveSP(float value, ISPObject spObject) {
+		addSP(value);
+		BlockSPGenerator.sendSPAround(value, worldObj, getPos(), worldObj.getBlockState(getPos()), spObject);
 		return true;
 	}
 
@@ -164,7 +163,7 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 		// TODO 自動生成されたメソッド・スタブ
 		super.readFromNBT(compound);
 
-		sp = compound.getInteger("VSAPI_SP");
+		sp = compound.getFloat("VSAPI_SP");
 		NBTTagCompound tagCompound = compound.getCompoundTag("VSAPI_SLOT");
 		itemStackToConsume = ItemStack.loadItemStackFromNBT(tagCompound);
 	}
@@ -174,7 +173,7 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 		// TODO 自動生成されたメソッド・スタブ
 		super.writeToNBT(compound);
 
-		compound.setInteger("VSAPI_SP", sp);
+		compound.setFloat("VSAPI_SP", sp);
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		if(itemStackToConsume!=null) itemStackToConsume.writeToNBT(tagCompound);
 		compound.setTag("VSAPI_SLOT", tagCompound);

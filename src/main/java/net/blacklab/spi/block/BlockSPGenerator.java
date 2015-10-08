@@ -89,7 +89,7 @@ public class BlockSPGenerator extends BlockContainer {
 	 * @param state
 	 * @return 送信先が見つかったかどうか
 	 */
-	public static boolean sendSPAround(int value, World worldIn, BlockPos pos, IBlockState state, ISPObject receivedIspObject){
+	public static boolean sendSPAround(float value, World worldIn, BlockPos pos, IBlockState state, ISPObject receivedIspObject){
 		TileEntity srcEntity = worldIn.getTileEntity(pos);
 		if(srcEntity instanceof TileEntitySPObjectBase){
 			List<TileEntity> targetTileEntities = new ArrayList<TileEntity>();
@@ -97,17 +97,17 @@ public class BlockSPGenerator extends BlockContainer {
 				BlockPos targetPos = pos.add(ConstUtil.XBOUND_LOOP[i], ConstUtil.YBOUND_LOOP[i], ConstUtil.ZBOUND_LOOP[i]);
 				TileEntity dstEntity = worldIn.getTileEntity(targetPos);
 				if(dstEntity instanceof ISPObject && !dstEntity.equals(receivedIspObject)){
-					int amountReceive = ((ISPObject) dstEntity).amountReceiveSPperUpdate((ISPObject) srcEntity);
+					float amountReceive = ((ISPObject) dstEntity).amountReceiveSPperUpdate((ISPObject) srcEntity);
 					if(amountReceive>0) targetTileEntities.add(dstEntity);
 				}
 			}
 			
 			if(!targetTileEntities.isEmpty()){
 				// SPを配信する。
-				int sendingSPperTile = (int)((float)value / (float)targetTileEntities.size());
+				float sendingSPperTile = (float)value / (float)targetTileEntities.size();
 				for(TileEntity entity : targetTileEntities){
 					ISPObject targetObject = (ISPObject) entity;
-					int actualAmount = Math.min(sendingSPperTile, targetObject.amountReceiveSPperUpdate((ISPObject) srcEntity));
+					float actualAmount = Math.min(sendingSPperTile, targetObject.amountReceiveSPperUpdate((ISPObject) srcEntity));
 					boolean flag = ((TileEntitySPObjectBase) srcEntity).sendSPToObject(actualAmount, targetObject);
 					if(!flag) ((TileEntitySPObjectBase) srcEntity).addSP(actualAmount);
 				}

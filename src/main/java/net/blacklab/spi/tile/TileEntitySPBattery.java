@@ -9,7 +9,7 @@ public class TileEntitySPBattery extends TileEntitySPGenerator {
 	public static final int DEFAULT_CAPACITY = 5000 * 10;
 
 	@Override
-	public int getMaxSP() {
+	public float getMaxSP() {
 		// TODO 自動生成されたメソッド・スタブ
 		return DEFAULT_CAPACITY;
 	}
@@ -27,12 +27,12 @@ public class TileEntitySPBattery extends TileEntitySPGenerator {
 	}
 
 	@Override
-	public int amountReceiveSPperUpdate(ISPObject spObject) {
+	public float amountReceiveSPperUpdate(ISPObject spObject) {
 		return Integer.MAX_VALUE;
 	}
 
 	@Override
-	public boolean onReceiveSP(int value, ISPObject spObject) {
+	public boolean onReceiveSP(float value, ISPObject spObject) {
 		boolean flag = addSP(value);
 		return flag;
 	}
