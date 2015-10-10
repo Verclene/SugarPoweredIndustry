@@ -1,5 +1,6 @@
 package net.blacklab.spi.container;
 
+import net.blacklab.spi.api.TileEntitySPObjectBase;
 import net.blacklab.spi.tile.TileEntitySPGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,9 +35,8 @@ public class ContainerSPGenerator extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		// TODO ちょっと当てずっぽう気味。こんなんでいいんだろうか…
-		if(!thePlayer.worldObj.isRemote){
-			((EntityPlayerMP)thePlayer).playerNetServerHandler.sendPacket(((TileEntitySPGenerator)generatorInventory).getDescriptionPacket());
+		if(!thePlayer.worldObj.isRemote && generatorInventory instanceof TileEntitySPObjectBase){
+			((TileEntitySPObjectBase)generatorInventory).getWorld().markBlockForUpdate(((TileEntitySPObjectBase)generatorInventory).getPos());
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.blacklab.spi.api.ISPObject;
 import net.blacklab.spi.api.TileEntitySPObjectBase;
+import net.blacklab.spi.block.BlockSPCable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -40,16 +41,20 @@ public class TileEntitySPCable extends TileEntitySPObjectBase {
 		}
 		
 		public void prepEntry(){
-			inputMap.add(new ConcurrentHashMap<ISPObject, Float>());
+			if(inputMap.size()<=1) inputMap.add(new ConcurrentHashMap<ISPObject, Float>());
 		}
 		
 		public boolean isEmpty(){
-			return inputMap.isEmpty();
+			boolean flag = inputMap.isEmpty();
+			if(!flag) flag |= inputMap.get(0)==null ? true : inputMap.get(0).isEmpty();
+			return flag;
 		}
 	}
 
 	private int connection = 0;
 	private SendingSPList sendingSPList;
+	
+	public boolean isSending = false;
 	
 	public TileEntitySPCable() {
 		super();
@@ -80,14 +85,16 @@ public class TileEntitySPCable extends TileEntitySPObjectBase {
 	public void readFromNBT(NBTTagCompound compound) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.readFromNBT(compound);
-		connection = compound.getInteger("VSAPI_CABLE_CONNECTION");
+		connection = compound.getInteger("VESPI_CABLE_CONNECTION");
+		isSending = compound.getBoolean("VESPI_CABLE_ISSENDING");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.writeToNBT(compound);
-		compound.setInteger("VSAPI_CABLE_CONNECTION", connection);
+		compound.setInteger("VESPI_CABLE_CONNECTION", connection);
+		compound.setBoolean("VESPI_CABLE_ISSENDING", isSending);
 	}
 
 	@Override
@@ -100,6 +107,15 @@ public class TileEntitySPCable extends TileEntitySPObjectBase {
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.getNbtCompound());
+	}
+
+	@Override
+	public boolean receiveClientEvent(int id, int type) {
+		if(id==BlockSPCable.SENDING_CHANGED_EVENT){
+			isSending = type==1;
+			return true;
+		}
+		return super.receiveClientEvent(id, type);
 	}
 
 	public void setConnection(int c){

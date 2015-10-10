@@ -3,17 +3,16 @@ package net.blacklab.spi.client.renderer;
 import net.blacklab.spi.block.BlockSPCable;
 import net.blacklab.spi.client.model.ModelCable;
 import net.blacklab.spi.tile.TileEntitySPCable;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderSPCable extends TileEntitySpecialRenderer {
 	
 	private ModelCable modelCable = new ModelCable(); 
 	private static final ResourceLocation CABLE_RESOURCE_LOCATION = new ResourceLocation("vespi","textures/model/spcable.png");
+	private static final ResourceLocation CABLE_RESOURCE_LOCATION_S = new ResourceLocation("vespi","textures/model/spcable_s.png");
 
 	public RenderSPCable() {
 		super();
@@ -25,9 +24,13 @@ public class RenderSPCable extends TileEntitySpecialRenderer {
 		if(tileEntity instanceof TileEntitySPCable){
 			p_180535_8_ = 0.0625F;
 			GlStateManager.pushMatrix();
-			BlockPos pos = tileEntity.getPos();
+			if(((TileEntitySPCable) tileEntity).isSending){
+				bindTexture(CABLE_RESOURCE_LOCATION_S);
+			}else {
+				bindTexture(CABLE_RESOURCE_LOCATION);
+			}
+
 			GlStateManager.translate((float)posX+0.5F, (float)posY-0.5F, (float)posZ+0.5F);
-			bindTexture(CABLE_RESOURCE_LOCATION);
 
 			modelCable.centerCube.render(p_180535_8_);
 			
@@ -52,6 +55,7 @@ public class RenderSPCable extends TileEntitySpecialRenderer {
 			}
 			
 			GlStateManager.popMatrix();
+			GlStateManager.colorMask(true, true, true, true);
 		}
 	}
 

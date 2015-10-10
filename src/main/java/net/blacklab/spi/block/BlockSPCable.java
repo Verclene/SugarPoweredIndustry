@@ -16,6 +16,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -32,6 +33,7 @@ public class BlockSPCable extends BlockContainer {
 	public static final PropertyBool DOWN_CONNECTED = PropertyBool.create("down");
 	
 	public static final int CONNECTION_CHANGED_EVENT = 0;
+	public static final int SENDING_CHANGED_EVENT = 1;
 
 	@Override
 	public void onNeighborBlockChange(World worldIn, BlockPos pos,
@@ -59,14 +61,24 @@ public class BlockSPCable extends BlockContainer {
 						((TileEntitySPCable) tEntity).addSP(entry.getValue());
 						if(!BlockSPGenerator.sendSPAround(entry.getValue(), worldIn, pos, state, entry.getKey())){
 							BlockSPGenerator.sendSPAround(entry.getValue(), worldIn, pos, state, (ISPObject) tEntity);
+						}else{
+							if(!((TileEntitySPCable)tEntity).isSending){
+								((TileEntitySPCable) tEntity).isSending = true;
+								worldIn.markBlockForUpdate(pos);
+							}
 						}
 					}
 				}
-			}
-			// どうしても残ってしまった？
-			if(((TileEntitySPCable) tEntity).getSP()>0){
-				spList.putEntry((ISPObject) tEntity, ((TileEntitySPCable) tEntity).getSP());
-				((TileEntitySPCable) tEntity).setSP(0);
+				// 残ってしまった？
+				if(((TileEntitySPCable) tEntity).getSP()>0){
+					spList.putEntry((ISPObject) tEntity, ((TileEntitySPCable) tEntity).getSP());
+					((TileEntitySPCable) tEntity).setSP(0);
+				}
+			}else{
+				if(((TileEntitySPCable)tEntity).isSending){
+					((TileEntitySPCable) tEntity).isSending = false;
+					worldIn.markBlockForUpdate(pos);
+				}
 			}
 		}
 		worldIn.scheduleUpdate(pos, state.getBlock(), 1);

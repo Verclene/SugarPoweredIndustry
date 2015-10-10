@@ -44,7 +44,7 @@ public class BlockSPBattery extends BlockSPGenerator {
 			if(((TileEntitySPBattery) tEntity).getSP() > 0 && !worldIn.isBlockPowered(pos))
 				sendSPAround(Math.min(((TileEntitySPBattery) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
 		}
-		worldIn.scheduleUpdate(pos, state.getBlock(), 2);
+		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class BlockSPBattery extends BlockSPGenerator {
 			EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
 			EntityLivingBase placer) {
 		IBlockState state = super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
-		worldIn.scheduleUpdate(pos, state.getBlock(), 2);
+		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 		return state;
 	}
 
