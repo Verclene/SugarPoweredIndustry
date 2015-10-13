@@ -1,0 +1,11 @@
+{
+	"parent": "vespi:block/spcable",
+	"textures": {
+		"down":	 "vespi:blocks/spbattery_all",
+		"up":	 "vespi:blocks/spbattery_all" ,
+		"north": "vespi:blocks/spbattery_all",
+		"south": "vespi:blocks/spbattery_all",
+		"east":	 "vespi:blocks/spgenerator_side",
+		"west":	 "vespi:blocks/spgenerator_side"
+	}
+}

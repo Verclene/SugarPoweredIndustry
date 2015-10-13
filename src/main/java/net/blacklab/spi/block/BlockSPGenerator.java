@@ -11,7 +11,10 @@ import net.blacklab.spi.api.TileEntitySPObjectBase;
 import net.blacklab.spi.common.GuiHandler;
 import net.blacklab.spi.tile.TileEntitySPGenerator;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,11 +27,35 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockSPGenerator extends BlockContainer {
-	
+
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
 	public BlockSPGenerator() {
-		super(Material.rock);
+		super(new Material(MapColor.stoneColor));
 		setUnlocalizedName("spgenerator");
+		setHardness(2.0f);
 		setCreativeTab(CreativeTabs.tabRedstone);
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	}
+
+	@Override
+	protected BlockState createBlockState() {
+		// TODO 自動生成されたメソッド・スタブ
+		return new BlockState(this, FACING);
+	}
+
+	public IBlockState getStateFromMeta(int meta) {
+		EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+			enumfacing = EnumFacing.NORTH;
+		}
+
+		return this.getDefaultState().withProperty(FACING, enumfacing);
+	}
+
+	public int getMetaFromState(IBlockState state) {
+		return ((EnumFacing)state.getValue(FACING)).getIndex();
 	}
 
 	@Override
@@ -63,7 +90,7 @@ public class BlockSPGenerator extends BlockContainer {
 				if(((TileEntitySPGenerator) tEntity).addSP(50))
 					((TileEntitySPGenerator) tEntity).decrStackSize(0, 1);;
 			}
-			
+
 			//SPの配信
 			if(((TileEntitySPGenerator) tEntity).getSP() > 0 && !worldIn.isBlockPowered(pos))
 				sendSPAround(Math.min(((TileEntitySPGenerator) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
@@ -76,10 +103,11 @@ public class BlockSPGenerator extends BlockContainer {
 			EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
 			EntityLivingBase placer) {
 		IBlockState state = super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
+		state = state.withProperty(FACING, placer.getHorizontalFacing());
 		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 		return state;
 	}
-	
+
 	public int sendingSPperUpdate = 300;
 
 	/**
@@ -101,7 +129,7 @@ public class BlockSPGenerator extends BlockContainer {
 					if(amountReceive>0) targetTileEntities.add(dstEntity);
 				}
 			}
-			
+
 			if(!targetTileEntities.isEmpty()){
 				// SPを配信する。
 				float sendingSPperTile = (float)value / (float)targetTileEntities.size();

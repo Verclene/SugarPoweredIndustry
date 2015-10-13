@@ -6,6 +6,8 @@ import net.blacklab.spi.SugarPoweredIndustry;
 import net.blacklab.spi.api.ISPObject;
 import net.blacklab.spi.common.GuiHandler;
 import net.blacklab.spi.tile.TileEntitySPBattery;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,11 +16,19 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class BlockSPBattery extends BlockSPGenerator {
-	
+public class BlockSPBattery extends BlockContainer {
+
+	public static float sendingSPperUpdate = 300f;
+
 	public BlockSPBattery() {
-		super();
+		super(Material.rock);
 		setUnlocalizedName("spbattery");
+	}
+
+	@Override
+	public int getRenderType() {
+		// TODO 自動生成されたメソッド・スタブ
+		return 3;
 	}
 
 	@Override
@@ -42,7 +52,7 @@ public class BlockSPBattery extends BlockSPGenerator {
 		TileEntity tEntity = worldIn.getTileEntity(pos);
 		if(tEntity instanceof TileEntitySPBattery){
 			if(((TileEntitySPBattery) tEntity).getSP() > 0 && !worldIn.isBlockPowered(pos))
-				sendSPAround(Math.min(((TileEntitySPBattery) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
+				BlockSPGenerator.sendSPAround(Math.min(((TileEntitySPBattery) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
 		}
 		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 	}

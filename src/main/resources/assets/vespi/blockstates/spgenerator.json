@@ -1,5 +1,8 @@
 {
 	"variants": {
-		"normal": { "model": "vespi:spgenerator" }
+		"facing=north": { "model": "vespi:spgenerator" },
+		"facing=east": { "model": "vespi:spgenerator", "y": 90 },
+		"facing=south": { "model": "vespi:spgenerator", "y": 180 },
+		"facing=west": { "model": "vespi:spgenerator", "y": 270 }
 	}
 }
