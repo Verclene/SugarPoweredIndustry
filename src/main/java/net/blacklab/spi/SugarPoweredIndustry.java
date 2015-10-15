@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod(modid=SugarPoweredIndustry.MODID, version=SugarPoweredIndustry.VERSION)
 public class SugarPoweredIndustry {
 	public static final String MODID = "vespi";
-	public static final String VERSION = "SI1 Build 11";
+	public static final String VERSION = "SI1 Build 13";
 
 	public static final int VERSION_CODE = 1;
 

@@ -1,13 +1,10 @@
 package net.blacklab.spi.block;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.blacklab.spi.SugarPoweredIndustry;
-import net.blacklab.spi.api.ConstUtil;
 import net.blacklab.spi.api.ISPObject;
-import net.blacklab.spi.api.TileEntitySPObjectBase;
+import net.blacklab.spi.api.SPUtil;
 import net.blacklab.spi.common.GuiHandler;
 import net.blacklab.spi.tile.TileEntitySPGenerator;
 import net.minecraft.block.BlockContainer;
@@ -93,7 +90,7 @@ public class BlockSPGenerator extends BlockContainer {
 
 			//SPの配信
 			if(((TileEntitySPGenerator) tEntity).getSP() > 0 && !worldIn.isBlockPowered(pos))
-				sendSPAround(Math.min(((TileEntitySPGenerator) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
+				SPUtil.sendSPAround(Math.min(((TileEntitySPGenerator) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
 		}
 		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 	}
@@ -109,40 +106,5 @@ public class BlockSPGenerator extends BlockContainer {
 	}
 
 	public int sendingSPperUpdate = 300;
-
-	/**
-	 * SPを周りに配信
-	 * @param worldIn
-	 * @param pos
-	 * @param state
-	 * @return 送信先が見つかったかどうか
-	 */
-	public static boolean sendSPAround(float value, World worldIn, BlockPos pos, IBlockState state, ISPObject receivedIspObject){
-		TileEntity srcEntity = worldIn.getTileEntity(pos);
-		if(srcEntity instanceof TileEntitySPObjectBase){
-			List<TileEntity> targetTileEntities = new ArrayList<TileEntity>();
-			for(int i=0; i<6; i++){
-				BlockPos targetPos = pos.add(ConstUtil.XBOUND_LOOP[i], ConstUtil.YBOUND_LOOP[i], ConstUtil.ZBOUND_LOOP[i]);
-				TileEntity dstEntity = worldIn.getTileEntity(targetPos);
-				if(dstEntity instanceof ISPObject && !dstEntity.equals(receivedIspObject)){
-					float amountReceive = ((ISPObject) dstEntity).amountReceiveSPperUpdate((ISPObject) srcEntity);
-					if(amountReceive>0) targetTileEntities.add(dstEntity);
-				}
-			}
-
-			if(!targetTileEntities.isEmpty()){
-				// SPを配信する。
-				float sendingSPperTile = (float)value / (float)targetTileEntities.size();
-				for(TileEntity entity : targetTileEntities){
-					ISPObject targetObject = (ISPObject) entity;
-					float actualAmount = Math.min(sendingSPperTile, targetObject.amountReceiveSPperUpdate((ISPObject) srcEntity));
-					boolean flag = ((TileEntitySPObjectBase) srcEntity).sendSPToObject(actualAmount, targetObject);
-					if(!flag) ((TileEntitySPObjectBase) srcEntity).addSP(actualAmount);
-				}
-				return true;
-			}
-		}
-		return false;
-	}
 
 }

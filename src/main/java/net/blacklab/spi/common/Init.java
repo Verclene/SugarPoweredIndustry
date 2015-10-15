@@ -3,6 +3,7 @@ package net.blacklab.spi.common;
 import net.blacklab.spi.SugarPoweredIndustry;
 import net.blacklab.spi.block.BlockSPBattery;
 import net.blacklab.spi.block.BlockSPCable;
+import net.blacklab.spi.block.BlockSPFurnace;
 import net.blacklab.spi.block.BlockSPGenerator;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -15,6 +16,8 @@ public class Init {
 
 	public static BlockSPGenerator blockSPGenerator;
 	public static BlockSPBattery blockSPBattery;
+	
+	public static BlockSPFurnace blockSPFurnace;
 
 	public static void registerBlocks() {
 		// Block
@@ -26,6 +29,9 @@ public class Init {
 
 		blockSPBattery = new BlockSPBattery();
 		GameRegistry.registerBlock(blockSPBattery, "spbattery");
+		
+		blockSPFurnace = new BlockSPFurnace();
+		GameRegistry.registerBlock(blockSPFurnace, "spfurnace");
 	}
 
 	public static void registerModels(){
@@ -37,6 +43,7 @@ public class Init {
 
 		ModelLoader.setCustomModelResourceLocation(
 				Item.getItemFromBlock(blockSPCable), 0, new ModelResourceLocation(SugarPoweredIndustry.MODID + ":spcable", "inventory"));
+		
 	}
 
 }

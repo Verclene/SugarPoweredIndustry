@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.blacklab.spi.SugarPoweredIndustry;
 import net.blacklab.spi.api.ISPObject;
+import net.blacklab.spi.api.SPUtil;
 import net.blacklab.spi.common.GuiHandler;
 import net.blacklab.spi.tile.TileEntitySPBattery;
 import net.minecraft.block.BlockContainer;
@@ -52,7 +53,7 @@ public class BlockSPBattery extends BlockContainer {
 		TileEntity tEntity = worldIn.getTileEntity(pos);
 		if(tEntity instanceof TileEntitySPBattery){
 			if(((TileEntitySPBattery) tEntity).getSP() > 0 && !worldIn.isBlockPowered(pos))
-				BlockSPGenerator.sendSPAround(Math.min(((TileEntitySPBattery) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
+				SPUtil.sendSPAround(Math.min(((TileEntitySPBattery) tEntity).getSP(), sendingSPperUpdate), worldIn, pos, state, (ISPObject) tEntity);
 		}
 		worldIn.scheduleUpdate(pos, state.getBlock(), 1);
 	}

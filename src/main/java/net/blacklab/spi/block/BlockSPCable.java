@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.blacklab.spi.api.ConstUtil;
 import net.blacklab.spi.api.ISPObject;
+import net.blacklab.spi.api.SPUtil;
 import net.blacklab.spi.tile.TileEntitySPCable;
 import net.blacklab.spi.tile.TileEntitySPCable.SendingSPList;
 import net.minecraft.block.Block;
@@ -59,8 +60,8 @@ public class BlockSPCable extends BlockContainer {
 					while(iterator.hasNext()){
 						Entry<ISPObject, Float> entry = iterator.next();
 						((TileEntitySPCable) tEntity).addSP(entry.getValue());
-						if(!BlockSPGenerator.sendSPAround(entry.getValue(), worldIn, pos, state, entry.getKey())){
-							BlockSPGenerator.sendSPAround(entry.getValue(), worldIn, pos, state, (ISPObject) tEntity);
+						if(!SPUtil.sendSPAround(entry.getValue(), worldIn, pos, state, entry.getKey())){
+							SPUtil.sendSPAround(entry.getValue(), worldIn, pos, state, (ISPObject) tEntity);
 						}else{
 							if(!((TileEntitySPCable)tEntity).isSending){
 								((TileEntitySPCable) tEntity).isSending = true;

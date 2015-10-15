@@ -1,8 +1,8 @@
 package net.blacklab.spi.tile;
 
 import net.blacklab.spi.api.ISPObject;
+import net.blacklab.spi.api.SPUtil;
 import net.blacklab.spi.api.TileEntitySPObjectBase;
-import net.blacklab.spi.block.BlockSPGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -38,7 +38,7 @@ public class TileEntitySPGenerator extends TileEntitySPObjectBase implements IIn
 	@Override
 	public boolean onReceiveSP(float value, ISPObject spObject) {
 		addSP(value);
-		BlockSPGenerator.sendSPAround(value, worldObj, getPos(), worldObj.getBlockState(getPos()), spObject);
+		SPUtil.sendSPAround(value, worldObj, getPos(), worldObj.getBlockState(getPos()), spObject);
 		return true;
 	}
 
